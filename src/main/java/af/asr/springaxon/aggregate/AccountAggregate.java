@@ -1,8 +1,12 @@
 package af.asr.springaxon.aggregate;
 
 import af.asr.springaxon.command.AccountCreateCommand;
+import af.asr.springaxon.command.DepositMoneyCommand;
 import af.asr.springaxon.command.WithdrawMoneyCommand;
 import af.asr.springaxon.event.AccountCreatedEvent;
+import af.asr.springaxon.event.MoneyDepositedEvent;
+import af.asr.springaxon.event.MoneyWithdrawnEvent;
+import af.asr.springaxon.exceptions.InsufficientBalanceException;
 import lombok.Data;
 import lombok.ToString;
 import org.axonframework.commandhandling.CommandHandler;
