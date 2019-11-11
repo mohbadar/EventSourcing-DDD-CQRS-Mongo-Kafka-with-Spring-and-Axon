@@ -1,10 +1,9 @@
 package af.asr.springaxon.config;
 
+import af.asr.springaxon.aggregate.AccountAggregate;
 import com.mongodb.MongoClient;
 import org.axonframework.boot.autoconfig.AxonAutoConfiguration;
-import org.axonframework.eventsourcing.EventCountSnapshotTriggerDefinition;
-import org.axonframework.eventsourcing.SnapshotTriggerDefinition;
-import org.axonframework.eventsourcing.Snapshotter;
+import org.axonframework.eventsourcing.*;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.mongo.DefaultMongoTemplate;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 
 @Configuration
 @AutoConfigureAfter(AxonAutoConfiguration.class)
@@ -40,10 +40,10 @@ public class AxonConfiguration {
     public SnapshotTriggerDefinition snapshotTriggerDefinition(Snapshotter snapshotter) {
         return new EventCountSnapshotTriggerDefinition(snapshotter, 5);
     }
-//    @Bean
-//    public Repository<AccountAggregate> accountAggregateRepository(SnapshotTriggerDefinition snapshotTriggerDefinition,AggregateFactory<AccountAggregate> aggregateFactory){
-//        return new EventSourcingRepository<AccountAggregate>(aggregateFactory, myEventStore,snapshotTriggerDefinition);
-//    }
+    @Bean
+    public Repository<AccountAggregate> accountAggregateRepository(SnapshotTriggerDefinition snapshotTriggerDefinition, AggregateFactory<AccountAggregate> aggregateFactory){
+        return (Repository<AccountAggregate>) new EventSourcingRepository<AccountAggregate>(aggregateFactory, myEventStore,snapshotTriggerDefinition);
+    }
 //	@ConditionalOnMissingBean
 //	@Bean
 //	public KafkaMessageConverter<String, byte[]> kafkaMessageConverter(
