@@ -3,6 +3,7 @@ package af.asr.springaxon.config;
 import af.asr.springaxon.aggregate.AccountAggregate;
 import com.mongodb.MongoClient;
 import org.axonframework.boot.autoconfig.AxonAutoConfiguration;
+import org.axonframework.commandhandling.model.Repository;
 import org.axonframework.eventsourcing.*;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Repository;
 
 @Configuration
 @AutoConfigureAfter(AxonAutoConfiguration.class)
@@ -26,15 +26,15 @@ public class AxonConfiguration {
     public EventStorageEngine eventStore(MongoClient client) {
         return new MongoEventStorageEngine(new DefaultMongoTemplate(client));
     }
-//    @Bean
-//    public AggregateFactory<AccountAggregate> aggregateFactory(){
-//        return new GenericAggregateFactory<AccountAggregate>(AccountAggregate.class);
-//    }
+    @Bean
+    public AggregateFactory<AccountAggregate> aggregateFactory(){
+        return new GenericAggregateFactory<AccountAggregate>(AccountAggregate.class);
+    }
 
-//    @Bean
-//    public Snapshotter snapShotter(AggregateFactory<AccountAggregate> aggregateFactory){
-//        return new AggregateSnapshotter(myEventStore, aggregateFactory);
-//    }
+    @Bean
+    public Snapshotter snapShotter(AggregateFactory<AccountAggregate> aggregateFactory){
+        return new AggregateSnapshotter(myEventStore, aggregateFactory);
+    }
 
     @Bean
     public SnapshotTriggerDefinition snapshotTriggerDefinition(Snapshotter snapshotter) {
@@ -42,7 +42,7 @@ public class AxonConfiguration {
     }
     @Bean
     public Repository<AccountAggregate> accountAggregateRepository(SnapshotTriggerDefinition snapshotTriggerDefinition, AggregateFactory<AccountAggregate> aggregateFactory){
-        return (Repository<AccountAggregate>) new EventSourcingRepository<AccountAggregate>(aggregateFactory, myEventStore,snapshotTriggerDefinition);
+        return new EventSourcingRepository<AccountAggregate>(aggregateFactory, myEventStore,snapshotTriggerDefinition);
     }
 //	@ConditionalOnMissingBean
 //	@Bean
