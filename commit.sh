@@ -1,4 +1,4 @@
 
 
 git add .
-git commit -m "Setup Code base "
+git commit -m "Command, Event and Query Implementation"
