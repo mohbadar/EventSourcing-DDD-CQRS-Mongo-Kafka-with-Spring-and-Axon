@@ -1,4 +1,4 @@
-package af.asr.springaxon.aggregate;
+package af.asr.springaxon.command;
 
 import af.asr.springaxon.command.BaseCommand;
 import lombok.Data;
